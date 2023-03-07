@@ -7,7 +7,7 @@ public class Principal {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AutorNuloException {
        
         Biblioteca biblio = BibliotecaLoader.getBlbliotecaRandom(500);
         Scanner sc = new Scanner(System.in);
