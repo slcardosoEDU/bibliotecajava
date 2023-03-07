@@ -1,6 +1,7 @@
 package mibiblio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,12 +16,22 @@ public class Libro {
     public Libro(String isbn, String titulo, List<Autor> autores, LocalDate publicacion, String editorial) {
         this.isbn = isbn;
         this.titulo = titulo;
-        this.autores = autores;
+        this.autores = autores!=null?autores:new ArrayList();
         this.publicacion = publicacion;
         this.editorial = editorial;
     }
 
-    public boolean esDeAutor(Autor autor){
+    /**
+     * Devuelve un valor lógico indicando si el autor pasado es uno de los 
+     * autores del libro.
+     * @param autor Autor a comprobar.
+     * @return True si el libro ha sido escrito por el autor
+     * @throws AutorNuloException Se escala la excepción si el autor pasado es null.
+     */
+    public boolean esDeAutor(Autor autor) throws AutorNuloException{
+        if(autor==null){
+            throw new AutorNuloException();
+        }
         return autores.contains(autor);
     }
     

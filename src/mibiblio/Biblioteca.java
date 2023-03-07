@@ -78,8 +78,9 @@ public class Biblioteca {
      * Devuelve una lista de libros almacenados escritos por el autor indicado.
      * @param autor Autor por el que se desea filtrar.
      * @return Libros de la biblioteca escritos por el autor.
+     * @throws mibiblio.AutorNuloException Si el autor es null.
      */
-    public List<Libro> getLibrosPorAutor(Autor autor){
+    public List<Libro> getLibrosPorAutor(Autor autor) throws AutorNuloException{
         HashSet<Libro> libros = new HashSet();
         for(Libro l:this.libros){
             if(l.esDeAutor(autor)){
