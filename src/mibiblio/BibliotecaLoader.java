@@ -33,7 +33,7 @@ public class BibliotecaLoader {
                     getRandomAutores(autores), 
                     getRandomFecha(),
                     editoriales[ed%editoriales.length]);
-            copias = rand.nextInt(0,5);
+                copias = rand.nextInt(5);
 
             while(copias!=0){
                 b.addLibro(l);
@@ -139,7 +139,7 @@ public class BibliotecaLoader {
 
     private static LocalDate getRandomFecha() {
         Random rand = new Random();
-        return LocalDate.ofYearDay(rand.nextInt(1700, 2022), rand.nextInt(1, 366));
+        return LocalDate.ofYearDay(rand.nextInt(100)+1920, rand.nextInt(364)+1);
     }
 
     private static List<Autor> loadAutores() {
