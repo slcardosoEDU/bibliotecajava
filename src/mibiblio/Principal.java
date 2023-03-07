@@ -8,7 +8,7 @@ public class Principal {
 
 
     public static void main(String[] args) {
-        
+       
         Biblioteca biblio = BibliotecaLoader.getBlbliotecaRandom(500);
         Scanner sc = new Scanner(System.in);
         String op;

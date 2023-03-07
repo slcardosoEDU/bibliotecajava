@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,16 +52,14 @@ public class BibliotecaLoader {
     
     /**
      * Devuelve una lista de seudoaleatoria de libros cuyos autores podrán ser uno
-     * o varios de los usuarios del sistema (linux).
+     * o varios de los usuarios del sistema (windows).
      * @return Lista seudoaleatoria de libros.
      */
-    public static List<Libro> getLinuxBaseLibros(){
+    public static List<Libro> getWindowsBaseLibros(){
         List<Libro> libros = new ArrayList();
-        List<Autor> autores = getLinuxUsersAsAutores();
+        List<Autor> autores = getWindowsUsersAsAutores();
         List<String> titulos = loadTitulos();
         String[] editoriales = loadEditoriales();
-        Random rand = new Random();
-        int copias = 1;
         int ed = 0;
         for (String t : titulos) {
             Libro l = new Libro(getRandomIsbn(), 
@@ -73,6 +72,71 @@ public class BibliotecaLoader {
         }
         
         return libros;
+    }
+    
+    /**
+     * Devuelve una lista de seudoaleatoria de libros cuyos autores podrán ser uno
+     * o varios de los usuarios del sistema (linux).
+     * @return Lista seudoaleatoria de libros.
+     */
+    public static List<Libro> getLinuxBaseLibros(){
+        List<Libro> libros = new ArrayList();
+        List<Autor> autores = getLinuxUsersAsAutores();
+        List<String> titulos = loadTitulos();
+        String[] editoriales = loadEditoriales();
+     
+        int ed = 0;
+        for (String t : titulos) {
+            Libro l = new Libro(getRandomIsbn(), 
+                    t, 
+                    getRandomAutores(autores), 
+                    getRandomFecha(),
+                    editoriales[ed%editoriales.length]);
+               ed++;
+               libros.add(l);
+        }
+        
+        return libros;
+    }
+    
+    /**
+     * Crea una lista de autores correspondiente con los usuarios del sistema.
+     * Solo válido para sistemas Windows.
+     * @return Lista de autores.
+     */
+    public static List<Autor> getWindowsUsersAsAutores(){
+        List<Autor> autores = new ArrayList();
+        String s;
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec("net user");
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            boolean esperar = true;
+            ArrayList<String> entradas = new ArrayList();
+            
+            while ((s = br.readLine()) != null){
+                if(esperar){
+                    esperar=!s.contains("---");
+                    continue;
+                }
+                entradas.add(s);                
+            }
+            p.waitFor();
+            p.destroy();
+            
+            String[] usuarios;
+            for(int i=0; i<entradas.size()-2;i++){
+                usuarios = entradas.get(i).split(" +");
+                for(String user: usuarios){
+                    autores.add(new Autor(user,"Usuario-windows"));
+                }                
+            }
+                
+            
+        } catch (Exception e) {
+            System.err.println("Error recuperando usuarios de windows.");
+        }
+        return autores;
     }
     
     /**
